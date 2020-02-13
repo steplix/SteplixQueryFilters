@@ -1,6 +1,6 @@
 {
   "name": "steplix-query-filters",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Steplix Query Filter is a module for parsing filters in string to object.",
   "main": "index.js",
   "scripts": {
@@ -37,6 +37,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^6.2.2",
-    "steplix-database": "0.0.4"
+    "steplix-database": "~0.0.4"
   }
 }
