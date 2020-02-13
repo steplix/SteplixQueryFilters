@@ -1,6 +1,6 @@
 # Steplix Query Filter
 
-Steplix Query Filter is a module for parsing filters in string to object.
+Steplix Query Filters is a module for parse filters from string to object.
 
 ## Index
 
