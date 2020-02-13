@@ -37,6 +37,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^6.2.2",
-    "steplix-database": "0.0.3"
+    "steplix-database": "0.0.4"
   }
 }

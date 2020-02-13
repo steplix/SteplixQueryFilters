@@ -11,5 +11,6 @@ module.exports = {
     nl: 'NOT LIKE',
     in: 'IN',
     ni: 'NOT IN',
-    be: 'BETWEEN'
+    be: 'BETWEEN',
+    nb: 'NOT BETWEEN'
 };

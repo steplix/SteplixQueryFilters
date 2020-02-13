@@ -4,9 +4,10 @@ const _ = require('lodash');
 
 const defaultOptions = {
     separator: ',',
+    separatorGroups: ';',
     key: '[A-Za-z0-9_]+',
     value: '.+',
-    operators: ['eq', 'ne', 'gt', 'ge', 'lt', 'le', 'li', 'nl', 'in', 'ni', 'be'],
+    operators: ['eq', 'ne', 'gt', 'ge', 'lt', 'le', 'li', 'nl', 'in', 'ni', 'be', 'nb'],
     operatorPrefix: ' ',
     operatorSuffix: ' ',
     operatorFlags: 'i'
@@ -14,6 +15,8 @@ const defaultOptions = {
 
 const methodParse = 'parse';
 const methodFormat = 'format';
+
+const needJsonParse = ['in', 'ni', 'be', 'nb'];
 
 class Parser {
     constructor (options) {
@@ -60,7 +63,7 @@ class Parser {
             const [group, key, operator, value] = parsed; // eslint-disable-line no-unused-vars
 
             carry[key] = carry[key] || {};
-            carry[key][this.mapOperator(operator, methodParse)] = value;
+            carry[this.mapKey(key, operator)][this.mapOperator(operator, methodParse)] = this.mapValue(value, operator, methodParse);
             return carry;
         }, {});
 
@@ -90,11 +93,36 @@ class Parser {
                 if (!this.regexpValue.test(value)) {
                     return;
                 }
-                return carry.push(`${key}${this.options.operatorPrefix}${this.mapOperator(operator, methodFormat)}${this.options.operatorSuffix}${value}`);
+                return carry.push(`${this.mapKey(key, operator)}${this.options.operatorPrefix}${this.mapOperator(operator, methodFormat)}${this.options.operatorSuffix}${this.mapValue(value, operator, methodFormat)}`);
             });
             return carry;
         }, [])
             .join(this.options.separator);
+    }
+
+    mapKey (key) {
+        return key;
+    }
+
+    mapValue (value, operator, method) {
+        // We assume that mapper is an object
+        switch (method) {
+            case methodFormat:
+                if (_.isArray(value)) {
+                    return `(${value.join(',')})`;
+                }
+                if (_.isObject(value)) {
+                    return JSON.stringify(object);
+                }
+                return value;
+
+            case methodParse:
+            default:
+                if (needJsonParse.includes(operator.trim().toLowerCase())) {
+                    return _.map(value.trim().replace(/^\[/, '').replace(/\]$/, '').split(this.options.separatorGroups), _.trim);
+                }
+                return value;
+        }
     }
 
     mapOperator (operator, method) {
