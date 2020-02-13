@@ -1,0 +1,42 @@
+{
+  "name": "steplix-query-filters",
+  "version": "0.0.1",
+  "description": "Steplix Query Filter is a module for parsing filters in string to object.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/.bin/eslint core tests",
+    "lint-fix": "node_modules/.bin/eslint --fix core tests",
+    "test": "NODE_ENV=testing mocha --file './tests/setup.js' --reporter spec --recursive tests/**/*.test.js"
+  },
+  "homepage": "https://github.com/steplix/SteplixQueryFilters#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steplix/SteplixQueryFilters.git"
+  },
+  "author": "Steplix Developers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steplix/SteplixQueryFilters/issues"
+  },
+  "keywords": [
+    "query",
+    "filter",
+    "params",
+    "parameters",
+    "steplix"
+  ],
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.6.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "mocha": "^6.2.2",
+    "steplix-database": "0.0.3"
+  }
+}

@@ -1,0 +1,131 @@
+'use strict';
+
+const _ = require('lodash');
+
+const defaultOptions = {
+    separator: ',',
+    key: '[A-Za-z0-9_]+',
+    value: '.+',
+    operators: ['eq', 'ne', 'gt', 'ge', 'lt', 'le', 'li', 'nl', 'in', 'ni', 'be'],
+    operatorPrefix: ' ',
+    operatorSuffix: ' ',
+    operatorFlags: 'i'
+};
+
+const methodParse = 'parse';
+const methodFormat = 'format';
+
+class Parser {
+    constructor (options) {
+        this.options = _.defaultsDeep({}, options || {}, defaultOptions);
+        this.key = this.options.key;
+        this.value = this.options.value;
+        this.operators = this.options.operators;
+
+        // Compile regexp for parse query
+        this.compile();
+    }
+
+    static get defaults () {
+        return defaultOptions;
+    }
+
+    compile () {
+        const operators = [];
+
+        // Compile regexp for operators
+        _.each(this.operators, operator => operators.push(`${this.options.operatorPrefix}${operator}${this.options.operatorSuffix}`));
+        // Instantiate new regexp with key + operators + value
+        this.regexpFilters = new RegExp(`^(${this.key})(${operators.join('|')})(${this.value})$`, this.options.operatorFlags);
+        this.regexpKey = new RegExp(`^${this.key}$`);
+        this.regexpValue = new RegExp(`^${this.value}$`);
+        this.regexpOperatorPrefix = new RegExp(`^${this.options.operatorPrefix}`);
+        this.regexpOperatorSuffix = new RegExp(`${this.options.operatorSuffix}$`);
+    }
+
+    parse (str) {
+        // Verify str content
+        if (!str || !str.length) {
+            return;
+        }
+
+        // Reduce str filters
+        const filters = _.reduce(str.split(this.options.separator), (carry, filter) => {
+            const parsed = this.regexpFilters.exec(filter);
+
+            if (!parsed) {
+                return carry;
+            }
+
+            const [group, key, operator, value] = parsed; // eslint-disable-line no-unused-vars
+
+            carry[key] = carry[key] || {};
+            carry[key][this.mapOperator(operator, methodParse)] = value;
+            return carry;
+        }, {});
+
+        // Verify filters
+        if (!_.size(filters)) {
+            return;
+        }
+
+        return filters;
+    }
+
+    format (filters) {
+        // Verify filters content
+        if (!filters || !_.size(filters)) {
+            return;
+        }
+
+        // Reduce str filters
+        return _.reduce(filters, (carry, content, key) => {
+            // Check if is valid key
+            if (!this.regexpKey.test(key)) {
+                return carry;
+            }
+
+            _.each(content, (value, operator) => {
+                // Check if is valid value
+                if (!this.regexpValue.test(value)) {
+                    return;
+                }
+                return carry.push(`${key}${this.options.operatorPrefix}${this.mapOperator(operator, methodFormat)}${this.options.operatorSuffix}${value}`);
+            });
+            return carry;
+        }, [])
+            .join(this.options.separator);
+    }
+
+    mapOperator (operator, method) {
+        // Clean operator
+        if (method === methodParse) {
+            operator = operator.trim().toLowerCase().replace(this.regexpOperatorPrefix, '').replace(this.regexpOperatorSuffix, '');
+        }
+
+        // Check if has any mapper
+        if (!this.options.mapper) {
+            return operator;
+        }
+
+        // Check if mapper is function
+        if (_.isFunction(this.options.mapper)) {
+            return this.options.mapper(operator, method);
+        }
+
+        // We assume that mapper is an object
+        switch (method) {
+            case methodFormat:
+                if (!this.options.mapperInverse) {
+                    this.options.mapperInverse = _.invert(this.options.mapper);
+                }
+                return this.options.mapperInverse[operator] || operator;
+
+            case methodParse:
+            default:
+                return this.options.mapper[operator] || operator;
+        }
+    }
+}
+
+module.exports = Parser;
