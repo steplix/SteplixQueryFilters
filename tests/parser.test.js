@@ -93,9 +93,35 @@ describe('Parser', () => {
             done();
         });
 
-        it('should return object when option "mapper" is modified', done => {
+        it('should return object when option "mapValue" is modified', done => {
             const parser = new Parser({
-                mapper: Mappers.SQL
+                mapValue: value => `${value}_modified`
+            });
+            const result = parser.parse('active eq 1,description li %casa');
+
+            expect(result).to.be.a('object');
+            expect(result).to.have.property('active').to.have.property('eq').equal('1_modified');
+            expect(result).to.have.property('description').to.have.property('li').equal('%casa_modified');
+
+            done();
+        });
+
+        it('should return object when option "mapValueParse" is modified', done => {
+            const parser = new Parser({
+                mapValueParse: value => `${value}_modified`
+            });
+            const result = parser.parse('active eq 1,description li %casa');
+
+            expect(result).to.be.a('object');
+            expect(result).to.have.property('active').to.have.property('eq').equal('1_modified');
+            expect(result).to.have.property('description').to.have.property('li').equal('%casa_modified');
+
+            done();
+        });
+
+        it('should return object when option "mapOperator" is modified', done => {
+            const parser = new Parser({
+                mapOperator: Mappers.SQL
             });
             const result = parser.parse('active eq 1,description li %casa');
 
@@ -192,9 +218,31 @@ describe('Parser', () => {
             done();
         });
 
-        it('should return string when option "mapper" is modified', done => {
+        it('should return string when option "mapValue" is modified', done => {
             const parser = new Parser({
-                mapper: Mappers.SQL
+                mapValue: value => `${value}_modified`
+            });
+            const result = parser.format({ active: { eq: 1 }, description: { li: '%casa' } });
+
+            expect(result).to.be.a('string').equal('active eq 1_modified,description li %casa_modified');
+
+            done();
+        });
+
+        it('should return string when option "mapValueFormat" is modified', done => {
+            const parser = new Parser({
+                mapValueFormat: value => `${value}_modified`
+            });
+            const result = parser.format({ active: { eq: 1 }, description: { li: '%casa' } });
+
+            expect(result).to.be.a('string').equal('active eq 1_modified,description li %casa_modified');
+
+            done();
+        });
+
+        it('should return string when option "mapOperator" is modified', done => {
+            const parser = new Parser({
+                mapOperator: Mappers.SQL
             });
             const result = parser.format({ active: { '=': 1 }, description: { LIKE: '%casa' } });
 

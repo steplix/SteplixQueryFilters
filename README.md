@@ -53,17 +53,21 @@ parser.parse('active eq 1,description li %casa,description eq depto');
 | nb   | id nb [1;10]    | Check if it is not between a and b. id not between (1 and 10) |
 
 ### Configurations
-| Name            | Type               | Default                                                            | Description                                           |
-|:----------------|:-------------------|:--------------------------------------------------------------|:------------------------------------------------------|
-| separator       | string             | ","                                                           | Filter separator.                                     |
-| key             | string             | "[A-Za-z0-9_]+"                                               | String with RegExp format for match key on filters.   |
-| value           | string             | ".+"                                                          | String with RegExp format for match value on filters. |
-| operators       | array              | ['eq','ne','gt','ge','lt','le','li','nl','in','ni','be','nb'] | Operators known to the parser.                        |
-| operatorPrefix  | string             | " "                                                           | Operator prefix in the string filter.                 |
-| operatorSuffix  | string             | " "                                                           | Operator suffix in the string filter.                 |
-| operatorFlags   | string             | "i"                                                           | Operator regexp flag.                                 |
-| mapper          | object or function | null                                                          | Mapper used to replace operators.                     |
-| separatorGroups | string             | ";"                                                           | Filter group separator. Example "id in [1;2;3]"       |
+| Name            | Type               | Default                                                       | Description                                                        |
+|:----------------|:-------------------|:--------------------------------------------------------------|:-------------------------------------------------------------------|
+| separator       | string             | ","                                                           | Filter separator.                                                  |
+| key             | string             | "[A-Za-z0-9_]+"                                               | String with RegExp format for match key on filters.                |
+| value           | string             | ".+"                                                          | String with RegExp format for match value on filters.              |
+| operators       | array              | ['eq','ne','gt','ge','lt','le','li','nl','in','ni','be','nb'] | Operators known to the parser.                                     |
+| operatorPrefix  | string             | " "                                                           | Operator prefix in the string filter.                              |
+| operatorSuffix  | string             | " "                                                           | Operator suffix in the string filter.                              |
+| operatorFlags   | string             | "i"                                                           | Operator regexp flag.                                              |
+| mapper          | object or function | null                                                          | Mapper used to replace operators. <b>deprecated</b>                |
+| mapOperator     | object or function | null                                                          | Mapper used to replace operators.                                  |
+| mapValue        | function           | null                                                          | Mapper used to replace values.                                     |
+| mapValueFormat  | function           | null                                                          | Mapper used to replace values <i>only on <b>format</b> method.</i> |
+| mapValueParse   | function           | null                                                          | Mapper used to replace values <i>only on <b>parse</b> method.</i>  |
+| separatorGroups | string             | ";"                                                           | Filter group separator. Example "id in [1;2;3]"                    |
 
 #### Configuration examples
 ```js

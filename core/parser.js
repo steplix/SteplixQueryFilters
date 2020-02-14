@@ -105,9 +105,16 @@ class Parser {
     }
 
     mapValue (value, operator, method) {
+        if (this.options.mapValue) {
+            return this.options.mapValue(value, operator, method);
+        }
+
         // We assume that mapper is an object
         switch (method) {
             case methodFormat:
+                if (this.options.mapValueFormat) {
+                    return this.options.mapValueFormat(value, operator);
+                }
                 if (_.isArray(value)) {
                     return `(${value.join(',')})`;
                 }
@@ -119,10 +126,14 @@ class Parser {
             case methodParse:
             default:
                 if (needJsonParse.includes(operator.trim().toLowerCase())) {
-                    return _.map(value.trim().replace(/^\[/, '').replace(/\]$/, '').split(this.options.separatorGroups), _.trim);
+                    value = _.map(value.trim().replace(/^\[/, '').replace(/\]$/, '').split(this.options.separatorGroups), _.trim);
+                }
+                if (this.options.mapValueParse) {
+                    return this.options.mapValueParse(value, operator);
                 }
                 return value;
         }
+
     }
 
     mapOperator (operator, method) {
@@ -131,27 +142,30 @@ class Parser {
             operator = operator.trim().toLowerCase().replace(this.regexpOperatorPrefix, '').replace(this.regexpOperatorSuffix, '');
         }
 
+        // Supports backward compatibility
+        this.options.mapOperator = this.options.mapOperator || this.options.mapper;
+
         // Check if has any mapper
-        if (!this.options.mapper) {
+        if (!this.options.mapOperator) {
             return operator;
         }
 
         // Check if mapper is function
-        if (_.isFunction(this.options.mapper)) {
-            return this.options.mapper(operator, method);
+        if (_.isFunction(this.options.mapOperator)) {
+            return this.options.mapOperator(operator, method);
         }
 
         // We assume that mapper is an object
         switch (method) {
             case methodFormat:
-                if (!this.options.mapperInverse) {
-                    this.options.mapperInverse = _.invert(this.options.mapper);
+                if (!this.options.mapOperatorInverse) {
+                    this.options.mapOperatorInverse = _.invert(this.options.mapOperator);
                 }
-                return this.options.mapperInverse[operator] || operator;
+                return this.options.mapOperatorInverse[operator] || operator;
 
             case methodParse:
             default:
-                return this.options.mapper[operator] || operator;
+                return this.options.mapOperator[operator] || operator;
         }
     }
 }
