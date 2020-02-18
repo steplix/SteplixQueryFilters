@@ -123,7 +123,7 @@ class Parser {
         }
         // We assume that key mapper is an object
         else if (mapper) {
-            return mapper[key];
+            return mapper[key] || key;
         }
         return key;
     }
