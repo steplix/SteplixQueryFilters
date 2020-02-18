@@ -102,20 +102,28 @@ class Parser {
     }
 
     mapKey (key, operator, method) {
-        if (this.options.mapKey) {
-            return this.options.mapKey(key, operator, method);
-        }
-        switch (method) {
-            case methodFormat:
-                if (this.options.mapKeyFormat) {
-                    return this.options.mapKeyFormat(key, operator, method);
-                }
+        let mapper = this.options.mapKey;
 
-            case methodParse:
-            default:
-                if (this.options.mapKeyParse) {
-                    return this.options.mapKeyParse(key, operator, method);
-                }
+        if (!mapper) {
+            switch (method) {
+                case methodFormat:
+                    mapper = this.options.mapKeyFormat;
+                    break;
+
+                case methodParse:
+                default:
+                    mapper = this.options.mapKeyParse;
+                    break;
+            }
+        }
+
+        // Check if key mapper is function
+        if (_.isFunction(mapper)) {
+            return mapper(key, operator, method);
+        }
+        // We assume that key mapper is an object
+        else if (mapper) {
+            return mapper[key];
         }
         return key;
     }

@@ -62,14 +62,13 @@ parser.parse('active eq 1,description li %casa,description eq depto');
 | operatorPrefix  | string             | " "                                                           | Operator prefix in the string filter.                              |
 | operatorSuffix  | string             | " "                                                           | Operator suffix in the string filter.                              |
 | operatorFlags   | string             | "i"                                                           | Operator regexp flag.                                              |
-| mapper          | object or function | null                                                          | Mapper used to replace operators. <b>deprecated</b>                |
 | mapOperator     | object or function | null                                                          | Mapper used to replace operators.                                  |
 | mapValue        | function           | null                                                          | Mapper used to replace values.                                     |
 | mapValueFormat  | function           | null                                                          | Mapper used to replace values <i>only on <b>format</b> method.</i> |
 | mapValueParse   | function           | null                                                          | Mapper used to replace values <i>only on <b>parse</b> method.</i>  |
-| mapKey          | function           | null                                                          | Mapper used to replace keys.                                     |
-| mapKeyFormat    | function           | null                                                          | Mapper used to replace keys <i>only on <b>format</b> method.</i> |
-| mapKeyParse     | function           | null                                                          | Mapper used to replace keys <i>only on <b>parse</b> method.</i>  |
+| mapKey          | object or function | null                                                          | Mapper used to replace keys.                                     |
+| mapKeyFormat    | object or function | null                                                          | Mapper used to replace keys <i>only on <b>format</b> method.</i> |
+| mapKeyParse     | object or function | null                                                          | Mapper used to replace keys <i>only on <b>parse</b> method.</i>  |
 | separatorGroups | string             | ";"                                                           | Filter group separator. Example "id in [1;2;3]"                    |
 
 #### Configuration examples
