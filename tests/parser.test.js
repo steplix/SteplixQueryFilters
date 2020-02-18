@@ -93,6 +93,32 @@ describe('Parser', () => {
             done();
         });
 
+        it('should return object when option "mapKey" is modified', done => {
+            const parser = new Parser({
+                mapKey: key => `${key}_modified`
+            });
+            const result = parser.parse('active eq 1,description li %casa');
+
+            expect(result).to.be.a('object');
+            expect(result).to.have.property('active_modified').to.have.property('eq').equal('1');
+            expect(result).to.have.property('description_modified').to.have.property('li').equal('%casa');
+
+            done();
+        });
+
+        it('should return object when option "mapKeyParse" is modified', done => {
+            const parser = new Parser({
+                mapKeyParse: key => `${key}_modified`
+            });
+            const result = parser.parse('active eq 1,description li %casa');
+
+            expect(result).to.be.a('object');
+            expect(result).to.have.property('active_modified').to.have.property('eq').equal('1');
+            expect(result).to.have.property('description_modified').to.have.property('li').equal('%casa');
+
+            done();
+        });
+
         it('should return object when option "mapValue" is modified', done => {
             const parser = new Parser({
                 mapValue: value => `${value}_modified`
@@ -214,6 +240,28 @@ describe('Parser', () => {
             const result = parser.format({ active: { eq: 1 }, description: { li: '%casa' } });
 
             expect(result).to.be.a('string').equal('active eq-1,description li-%casa');
+
+            done();
+        });
+
+        it('should return string when option "mapKey" is modified', done => {
+            const parser = new Parser({
+                mapKey: key => `${key}_modified`
+            });
+            const result = parser.format({ active: { eq: 1 }, description: { li: '%casa' } });
+
+            expect(result).to.be.a('string').equal('active_modified eq 1,description_modified li %casa');
+
+            done();
+        });
+
+        it('should return string when option "mapKeyFormat" is modified', done => {
+            const parser = new Parser({
+                mapKeyFormat: key => `${key}_modified`
+            });
+            const result = parser.format({ active: { eq: 1 }, description: { li: '%casa' } });
+
+            expect(result).to.be.a('string').equal('active_modified eq 1,description_modified li %casa');
 
             done();
         });

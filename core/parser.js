@@ -61,9 +61,10 @@ class Parser {
             }
 
             const [group, key, operator, value] = parsed; // eslint-disable-line no-unused-vars
+            const mappedKey = this.mapKey(key, operator, methodParse);
 
-            carry[key] = carry[key] || {};
-            carry[this.mapKey(key, operator)][this.mapOperator(operator, methodParse)] = this.mapValue(value, operator, methodParse);
+            carry[mappedKey] = carry[mappedKey] || {};
+            carry[mappedKey][this.mapOperator(operator, methodParse)] = this.mapValue(value, operator, methodParse);
             return carry;
         }, {});
 
@@ -93,14 +94,29 @@ class Parser {
                 if (!this.regexpValue.test(value)) {
                     return;
                 }
-                return carry.push(`${this.mapKey(key, operator)}${this.options.operatorPrefix}${this.mapOperator(operator, methodFormat)}${this.options.operatorSuffix}${this.mapValue(value, operator, methodFormat)}`);
+                return carry.push(`${this.mapKey(key, operator, methodFormat)}${this.options.operatorPrefix}${this.mapOperator(operator, methodFormat)}${this.options.operatorSuffix}${this.mapValue(value, operator, methodFormat)}`);
             });
             return carry;
         }, [])
             .join(this.options.separator);
     }
 
-    mapKey (key) {
+    mapKey (key, operator, method) {
+        if (this.options.mapKey) {
+            return this.options.mapKey(key, operator, method);
+        }
+        switch (method) {
+            case methodFormat:
+                if (this.options.mapKeyFormat) {
+                    return this.options.mapKeyFormat(key, operator, method);
+                }
+
+            case methodParse:
+            default:
+                if (this.options.mapKeyParse) {
+                    return this.options.mapKeyParse(key, operator, method);
+                }
+        }
         return key;
     }
 
