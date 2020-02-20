@@ -82,6 +82,20 @@ class Parser {
             return;
         }
 
+        let symbols = [];
+
+        // Check if mapper is object
+        if (_.isObject(this.options.mapOperator)) {
+            // Build symbols set, prevent errors with symbols.
+            _.each(this.options.mapOperator, operator => {
+                if (_.isSymbol(operator)) {
+                    symbols.push(operator);
+                }
+            });
+            // Instantiate symbols set.
+            symbols = new Set(symbols);
+        }
+
         // Reduce str filters
         return _.reduce(filters, (carry, content, key) => {
             // Check if is valid key
@@ -89,7 +103,16 @@ class Parser {
                 return carry;
             }
 
-            _.each(content, (value, operator) => {
+            // Prepare content keys, includes symbols keys.
+            const keys = Object
+                .getOwnPropertySymbols(content)
+                .filter(symbol => symbols.has(symbol))
+                .concat(_.keys(content));
+
+            // Each all keys.
+            _.each(keys, operator => {
+                const value = content[operator];
+
                 // Check if is valid value
                 if (!this.regexpValue.test(value)) {
                     return;
