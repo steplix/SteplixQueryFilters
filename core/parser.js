@@ -166,7 +166,7 @@ class Parser {
                     return `(${value.join(',')})`;
                 }
                 if (_.isObject(value)) {
-                    return JSON.stringify(object);
+                    return JSON.stringify(value);
                 }
                 return value;
 
