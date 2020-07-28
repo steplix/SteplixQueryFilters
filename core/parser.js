@@ -7,7 +7,7 @@ const defaultOptions = {
     separatorGroups: ';',
     key: '[A-Za-z0-9_]+',
     value: '.+',
-    operators: ['eq', 'ne', 'gt', 'ge', 'lt', 'le', 'li', 'nl', 'in', 'ni', 'be', 'nb'],
+    operators: ['eq', 'ee', 'ne', 'gt', 'ge', 'lt', 'le', 'li', 'nl', 'in', 'ni', 'be', 'nb'],
     operatorPrefix: ' ',
     operatorSuffix: ' ',
     operatorFlags: 'i'

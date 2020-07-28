@@ -2,6 +2,7 @@
 
 module.exports = {
     eq: '=',
+    ee: '=', // exact equal
     ne: '!=',
     gt: '>',
     ge: '>=',
