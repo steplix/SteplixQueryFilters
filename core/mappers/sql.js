@@ -15,5 +15,5 @@ module.exports = {
     be: 'BETWEEN',
     nb: 'NOT BETWEEN',
     is: 'IS',
-    ns: 'NOT IS'
+    no: 'NOT IS'
 };
