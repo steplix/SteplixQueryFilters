@@ -4,13 +4,14 @@ const { Parser, Mappers } = require('../core/steplix');
 
 describe('Parser', () => {
     describe('#parse', () => {
-        it('should return object with key "active" and "description"', done => {
+        it('should return object with key "active", "description" and "deleted_at"', done => {
             const parser = new Parser();
-            const result = parser.parse('active eq 1,description li %casa');
+            const result = parser.parse('active eq 1,description li %casa,deleted_at is null');
 
             expect(result).to.be.a('object');
             expect(result).to.have.property('active').to.have.property('eq').equal('1');
             expect(result).to.have.property('description').to.have.property('li').equal('%casa');
+            expect(result).to.have.property('deleted_at').to.have.property('is').equal('null');
 
             done();
         });
@@ -169,11 +170,11 @@ describe('Parser', () => {
     });
 
     describe('#format', () => {
-        it('should return string with key "active" and "description"', done => {
+        it('should return string with key "active", "description" and "deleted_at"', done => {
             const parser = new Parser();
-            const result = parser.format({ active: { eq: 1 }, description: { li: '%casa' } });
+            const result = parser.format({ active: { eq: 1 }, description: { li: '%casa' }, deleted_at: { is: 'null' } });
 
-            expect(result).to.be.a('string').equal('active eq 1,description li %casa');
+            expect(result).to.be.a('string').equal('active eq 1,description li %casa,deleted_at is null');
 
             done();
         });
@@ -294,7 +295,7 @@ describe('Parser', () => {
             });
             const result = parser.format({ active: { '=': 1 }, description: { LIKE: '%casa' } });
 
-            expect(result).to.be.a('string').equal('active eq 1,description li %casa');
+            expect(result).to.be.a('string').equal('active ee 1,description li %casa');
 
             done();
         });

@@ -13,5 +13,7 @@ module.exports = {
     in: 'IN',
     ni: 'NOT IN',
     be: 'BETWEEN',
-    nb: 'NOT BETWEEN'
+    nb: 'NOT BETWEEN',
+    is: 'IS',
+    ns: 'NOT IS'
 };
