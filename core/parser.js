@@ -8,6 +8,7 @@ const defaultOptions = {
     key: '[A-Za-z0-9_]+',
     value: '.+',
     operators: ['eq', 'ee', 'ne', 'gt', 'ge', 'lt', 'le', 'li', 'nl', 'in', 'ni', 'be', 'nb', 'is', 'no'],
+    needJsonParse: ['in', 'ni', 'be', 'nb'],
     operatorPrefix: ' ',
     operatorSuffix: ' ',
     operatorFlags: 'i'
@@ -15,8 +16,6 @@ const defaultOptions = {
 
 const methodParse = 'parse';
 const methodFormat = 'format';
-
-const needJsonParse = ['in', 'ni', 'be', 'nb'];
 
 class Parser {
     constructor (options) {
@@ -172,7 +171,7 @@ class Parser {
 
             case methodParse:
             default:
-                if (needJsonParse.includes(operator.trim().toLowerCase())) {
+                if (this.options.needJsonParse.includes(operator.trim().toLowerCase())) {
                     value = _.map(value.trim().replace(/^\[/, '').replace(/\]$/, '').split(this.options.separatorGroups), _.trim);
                 }
                 if (this.options.mapValueParse) {
