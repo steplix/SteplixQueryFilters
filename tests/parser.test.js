@@ -167,6 +167,30 @@ describe('Parser', () => {
 
             done();
         });
+
+        it('should return object with key "model" as array', done => {
+            const parser = new Parser();
+            const result = parser.parse('model in [model1;model2]');
+
+            expect(result).to.be.a('object');
+            expect(result).to.have.property('model').to.have.property('in').members(['model1', 'model2']);
+
+            done();
+        });
+
+
+        it('should return jsonParsed when you set needJsonParse filter', done => {
+            const parser = new Parser({
+                operators: ["between"],
+                needJsonParse: ["between"]
+            });
+            const result = parser.parse('count between [1;100]');
+   
+            expect(result).to.be.a('object');
+            expect(result).to.have.property('count').to.have.property('between').members(["1", "100"])
+
+            done();
+        });
     });
 
     describe('#format', () => {

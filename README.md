@@ -72,6 +72,7 @@ parser.parse('active eq 1,description li %casa,description eq depto');
 | mapKeyFormat    | object or function | null                                                                    | Mapper used to replace keys <i>only on <b>format</b> method.</i>   |
 | mapKeyParse     | object or function | null                                                                    | Mapper used to replace keys <i>only on <b>parse</b> method.</i>    |
 | separatorGroups | string             | ";"                                                                     | Filter group separator. Example "id in [1;2;3]"                    |
+| needJsonParse   | array              | ['in', 'ni', 'be', 'nb']                                                | Array of operators which values need to be parsed as json.         |
 
 #### Configuration examples
 ```js
